@@ -299,11 +299,12 @@ var _ = {};
   _.memoize = function(func) {
     var results = {};
 
-    return function(key){
-      if (!(key in results)){
-        results[key] = func.apply(null, arguments);
+    return function(){
+      var serialization = JSON.stringify(arguments);
+      if (!(serialization in results)){
+        results[serialization] = func.apply(null, arguments);
       }
-      return results[key];
+      return results[serialization];
 
     };
   };
