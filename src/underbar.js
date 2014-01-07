@@ -170,7 +170,13 @@ var _ = {};
   //   var sum = _.reduce(numbers, function(total, number){
   //     return total + number;
   //   }, 0); // should be 6
-  _.reduce = function(collection, iterator, accumulator) {
+  _.reduce = function(collection, iterator, accumulator) {    
+    accumulator = (accumulator === undefined) ?  collection[0] : accumulator;        
+    _.each(collection, function(val) {
+      //console.log(accumulator);
+      accumulator = iterator(accumulator, val);
+    });
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
