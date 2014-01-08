@@ -464,26 +464,26 @@ var _ = {};
     var queueLength = 0; //max que length in this implementation is 1
     var lastExecution = 0; //the latest time the func was called
     var readyTime = 0; //time at which func can be called again
-
+    var result;
     return function(){
-      var callTime = new Date();
-
-      if (callTime > readyTime){
+      var callTime = Number(new Date());
+      if(queueLength === 1) {
+        return result;
+      } else if (callTime > readyTime){
         result = func.apply(this, arguments);
-        lastExecution = Number(new Date());
-        readyTime += lastExecution + wait;
+        readyTime = callTime + wait;
         return result;
       }
       else if (callTime < readyTime) {
         queueLength++;
         setTimeout(function() {
           result = func.apply(this, arguments);
-          lastExecution = Number(new Date());
-          readyTime += lastExecution + wait;
+          callTime = Number(new Date());
+          readyTime = callTime + wait;
           queueLength--;
-          return result;
         }, readyTime - callTime);
-      }    
+        return result;
+      }
     };
   };
 
