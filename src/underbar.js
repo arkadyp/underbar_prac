@@ -421,7 +421,7 @@ var _ = {};
 
     for (var item = 0; item < arguments[0].length; item++){
       exists = true;
-      for (var arg = 0; arg < arguments.length; arg++){
+      for (var arg = 1; arg < arguments.length; arg++){
         if (arguments[arg].indexOf(arguments[0][item]) === -1){
           exists = false;
         }
@@ -437,6 +437,17 @@ var _ = {};
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var results = [];
+    var comparisonArrs = Array.prototype.slice.call(arguments, 1);
+    comparisonArrs = _.flatten(comparisonArrs);
+
+    _.each(array, function(val) {
+      if(comparisonArrs.indexOf(val) === -1) {
+        results.push(val);
+      }
+    });
+
+    return results;
   };
 
 
