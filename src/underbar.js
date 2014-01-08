@@ -461,6 +461,30 @@ var _ = {};
   //
   // See the Underbar readme for details.
   _.throttle = function(func, wait) {
+    var queueLength = 0; //max que length in this implementation is 1
+    var lastExecution = 0; //the latest time the func was called
+    var readyTime = 0; //time at which func can be called again
+
+    return function(){
+      var callTime = new Date();
+
+      if (callTime > readyTime){
+        result = func.apply(this, arguments);
+        lastExecution = Number(new Date());
+        readyTime += lastExecution + wait;
+        return result;
+      }
+      else if (callTime < readyTime) {
+        queueLength++;
+        setTimeout(function() {
+          result = func.apply(this, arguments);
+          lastExecution = Number(new Date());
+          readyTime += lastExecution + wait;
+          queueLength--;
+          return result;
+        }, readyTime - callTime);
+      }    
+    };
   };
 
 }).call(this);
